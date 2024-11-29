@@ -10,16 +10,14 @@
     <div class="form-structor">
         <div class="signup">
             <h2 class="form-title" id="signup"><span>or</span>Sign up</h2>
-            <form action="register" method="POST">
+            <form action="parent_register" method="POST">
             <div class="form-holder">
                 <input type="text" class="input" placeholder="Name" name="name" required />
                 <input type="email" class="input" placeholder="Email" name="email" pattern="^[a-z].*@gmail.com$" title="Enter a valid email" required/>
+                <input type="tel" class="input" placeholder="phoneNumber" name="phno" required />
+                <input type="text" class="input" placeholder="Address" name="address" required />
                 <input type="password" class="input" placeholder="Password" name="pwd" required />
-                <select name="role" id="" class="input" required>
-                    <option value="" selected disabled>Select your role</option>
-                    <option value="student">Student</option>
-                    <option value="creater">Teacher</option>
-                </select>
+          
             </div>
             <button class="submit-btn" type="submit">Sign up</button>
             </form>
@@ -29,7 +27,7 @@
                 <h2 class="form-title" id="login"><span>or</span>Log in</h2>
                 <form action="" method="post">
                 <div class="form-holder">
-                    <input type="email" class="input" placeholder="Email" name="uname" />
+                    <input type="email" class="input" placeholder="Email" name="email" />
                     <input type="password" class="input" placeholder="Password" name="pwd" />
                 </div>
                 <button class="submit-btn" type="submit">Log in</button>

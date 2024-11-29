@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request,session
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from models import *  # Import models from models.py
@@ -152,7 +152,7 @@ def delete_teacher(teacher_id):
     flash('Teacher deleted successfully!', 'success')
     return redirect(url_for('admin_display_teacher'))
 
-@app.route('/add_book')
+@app.route('/add_book',methods=['GET', 'POST'])
 @login_required
 def add_book():
     if request.method == 'POST':
@@ -184,17 +184,116 @@ def add_book():
         db.session.add(new_book)
         db.session.commit()
         flash('Book added successfully!', 'success')
-        return redirect(url_for('list_books')) 
+        return redirect(url_for('admin_view_books')) 
     return render_template('admin_side/add_book.html')
 
 @app.route('/admin_view_books')
 @login_required
 def admin_view_books():
     books = Book.query.all()
-    return render_template('admin_side/view_books.html', books=books)
+    return render_template('admin_side/view_book.html', books=books)
+
+
+@app.route('/edit_book/<int:book_id>', methods=['GET', 'POST'])
+@login_required
+def edit_book(book_id):
+    book = Book.query.get_or_404(book_id)
+
+    if request.method == 'POST':
+        book.book_name = request.form['b_name']
+        book.author = request.form['author']
+        book.publication = request.form['publication']
+        book.subject = request.form['subject']
+        book.rack_no = request.form['rack_no']
+        book.no_book = request.form['no_book']
+
+        # Handle file upload
+        image_file = request.files['file']
+        image_filename = None
+        if image_file and image_file.filename:
+            image_filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+            book.image = image_filename
+
+        db.session.commit()
+        flash('Book details updated successfully!', 'success')
+        return redirect(url_for('edit_book', book_id=book_id))
+
+    return render_template('admin_side/edit_book.html', book=book)
+
+@app.route('/delete_book/<int:book_id>')
+@login_required
+def delete_book(book_id):    
+    book = Book.query.get_or_404(book_id)
+    db.session.delete(book)    
+    db.session.commit()    
+    flash('Book deleted successfully!', 'success')    
+    return redirect(url_for('admin_view_books'))
+
+
+
+
+#------------------------------parent--------------------------------------
+
+@app.route('/', methods=['GET', 'POST'])
+def parent_teacher_login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['pwd']
+        
+        # Fetch the user from the database
+        user = User.query.filter_by(email=email).first()
+        print(user)
+        if user and bcrypt.check_password_hash(user.password, password):
+            # Store user data in the session
+            session['user_id'] = user.id
+            session['user_name'] = user.name
+            flash('Login successful!', 'success')
+            return redirect(url_for('parent_dashboard'))  # Redirect to a protected route
+        else:
+            flash('Invalid email or password', 'danger')
+    
+    return render_template('login.html')
+
+
+
+@app.route('/parent_dashboard')
+def parent_dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('parent_teacher_login'))
+    teacher=Teacher.query.all()
+    return render_template('parent_side/index.html',teachers=teacher)
+
+
+
+@app.route('/parent_register', methods=['GET', 'POST'])
+def parent_register():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        phone_number = request.form['phno']
+        address = request.form['address']
+        password = bcrypt.generate_password_hash(request.form['pwd'])  # Hashing the password for security
+        
+        # Create new user instance
+        new_user = User(
+            name=name,
+            email=email,
+            phone_number=phone_number,
+            address=address,
+            password=password
+        )
+        
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Registration successful!', 'success')
+        return redirect(url_for('parent_register'))
+
+
 
 @app.route('/index')
 def index():
+
     return render_template('index.html')
 
 

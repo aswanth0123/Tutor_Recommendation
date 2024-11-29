@@ -608,15 +608,14 @@
                               type="text"
                               id="firstName"
                               name="b_name"
-                              value="
-                              "
+                              value="{{book.book_name}}"
                               autofocus
                               placeholder="Book Name"
                             />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="lastName" class="form-label">Author</label>
-                            <input class="form-control" type="text" name="author" id="lastName" value="" placeholder="Author"/>
+                            <input class="form-control" type="text" name="author" id="lastName" value="{{book.author}}" placeholder="Author"/>
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">Publication</label>
@@ -625,7 +624,7 @@
                               type="text"
                               id="email"
                               name="publication"
-                              value=""
+                              value="{{book.publication}}"
                               placeholder="Publication"
                             />
                           </div>
@@ -637,6 +636,7 @@
                               id="organization"
                               name="subject"
                               placeholder="subject"
+                              value="{{book.subject}}"
                             />
                           </div>
                           <div class="mb-3 col-md-6">
@@ -648,12 +648,13 @@
                                 name="rack_no"
                                 class="form-control"
                                 placeholder="Rack Number"
+                                value="{{book.rack_no}}"
                               />
                             </div>
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="address" class="form-label">Number of book</label>
-                            <input type="text" class="form-control" id="address" name="no_book" placeholder="Number of books" />
+                            <input type="text" class="form-control" id="address" name="no_book" value="{{book.no_book}}" placeholder="Number of books" />
                           </div>
                           <div class="mb-3 col-md-6">
 
@@ -683,7 +684,8 @@
                         </div>
                         <div class="mt-2">
                           <input type="submit" class="btn btn-primary me-2" value="Save">
-                          <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                          <a href="../delete_book/{{book.id}}" class="btn btn-outline-danger">Delete</a>
+                          <a href="../admin_view_books" class="btn btn-outline-secondary">Cancel</a>
                         </div>
                       </form>
                     </div>
