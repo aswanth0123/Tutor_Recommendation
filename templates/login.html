@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/login.css') }}">
+</head>
+<body>
+    <div class="form-structor">
+        <div class="signup">
+            <h2 class="form-title" id="signup"><span>or</span>Sign up</h2>
+            <form action="register" method="POST">
+            <div class="form-holder">
+                <input type="text" class="input" placeholder="Name" name="name" required />
+                <input type="email" class="input" placeholder="Email" name="email" pattern="^[a-z].*@gmail.com$" title="Enter a valid email" required/>
+                <input type="password" class="input" placeholder="Password" name="pwd" required />
+                <select name="role" id="" class="input" required>
+                    <option value="" selected disabled>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="creater">Teacher</option>
+                </select>
+            </div>
+            <button class="submit-btn" type="submit">Sign up</button>
+            </form>
+        </div>
+        <div class="login slide-up">
+            <div class="center">
+                <h2 class="form-title" id="login"><span>or</span>Log in</h2>
+                <form action="" method="post">
+                <div class="form-holder">
+                    <input type="email" class="input" placeholder="Email" name="uname" />
+                    <input type="password" class="input" placeholder="Password" name="pwd" />
+                </div>
+                <button class="submit-btn" type="submit">Log in</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static',filename='assets/js/login.js') }}"></script>
+</body>
+</html>
