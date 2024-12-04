@@ -4,13 +4,14 @@ from flask_bcrypt import Bcrypt
 from models import *  # Import models from models.py
 import os
 from werkzeug.utils import secure_filename
+import datetime
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '43e77e90e26e1ddee83ea02b35065b805630944d4bd13d3abcbd120627d308a9' # Replace with a strong secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Project:Project123@localhost/project'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-UPLOAD_FOLDER = 'uploads/'  # Directory to store uploaded files
+UPLOAD_FOLDER = 'static/uploads/'  # Directory to store uploaded files
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure the upload folder exists
@@ -45,7 +46,7 @@ def admin_login():
     return render_template('admin_side/login.html')
 
 @app.route('/admin_dashboard')
-@login_required
+# @login_required
 def admin_dashboard():
     if not isinstance(current_user, Admin):
         flash("Access denied.", "danger")
@@ -242,27 +243,39 @@ def parent_teacher_login():
         password = request.form['pwd']
         
         # Fetch the user from the database
-        user = User.query.filter_by(email=email).first()
-        print(user)
+        user = User.query.filter_by(email=email).first()   
+        teacher=Teacher.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             # Store user data in the session
             session['user_id'] = user.id
             session['user_name'] = user.name
             flash('Login successful!', 'success')
             return redirect(url_for('parent_dashboard'))  # Redirect to a protected route
+        elif teacher:
+            # Store user data in the session
+            session['teacher_id'] = teacher.id
+            session['teaher_name'] = teacher.name
+            flash('Login successful!', 'success')
+            return redirect(url_for('teacher_dashboard'))
         else:
             flash('Invalid email or password', 'danger')
     
     return render_template('login.html')
 
-
+@app.route('/parent_teacher_logout')
+def parent_teacher_logout():
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('parent_teacher_login'))
 
 @app.route('/parent_dashboard')
 def parent_dashboard():
     if 'user_id' not in session:
         return redirect(url_for('parent_teacher_login'))
     teacher=Teacher.query.all()
-    return render_template('parent_side/index.html',teachers=teacher)
+    student=Student.query.filter_by(parent_id=session['user_id']).all()
+    print(student)
+    return render_template('parent_side/index.html',teachers=teacher,students=student)
 
 
 
@@ -289,6 +302,56 @@ def parent_register():
         flash('Registration successful!', 'success')
         return redirect(url_for('parent_register'))
 
+@app.route('/add_std', methods=['GET', 'POST'])
+def add_std():
+    if request.method == 'POST':
+        name = request.form['name']
+        parent=User.query.get(session['user_id'])
+        parent_id=parent.id
+        class_name = request.form['class']
+        image_file = request.files['file']
+        if image_file and image_file.filename:
+            image_filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+        student=Student(sname=name,parent_id=parent_id,clad=class_name,img=image_filename)
+        db.session.add(student)
+        db.session.commit() 
+        flash('Registration successful!', 'success')
+        return redirect(url_for('parent_dashboard'))
+
+
+     
+
+
+
+
+#------------------------------teacher--------------------------------------
+
+@app.route('/teacher_dashboard')
+def teacher_dashboard():
+    if 'teacher_id' not in session:
+        return redirect(url_for('teacher_login'))
+    teacher=Teacher.query.get(session['teacher_id'])
+    return render_template('teacher_side/index.html',teacher=teacher)
+
+
+@app.route('/add_demo_video', methods=['GET', 'POST'])
+def add_demo_video():
+    if request.method == 'POST':
+        teacher_id = session['teacher_id']
+        video_url = request.files['file']
+        teacher = Teacher.query.get(teacher_id)
+        subject = request.form['subject']
+        class_details = request.form['class_details']
+        date=datetime.datetime.now().strftime('%Y-%m-%d')
+        if video_url and video_url.filename:
+            video_filename = secure_filename(video_url.filename)
+            video_url.save(os.path.join(app.config['UPLOAD_FOLDER'], video_filename))             
+        demo=DemoClass(teacher_id=teacher_id,subject=subject,class_details=class_details,video=video_filename,date=date)
+        db.session.add(demo)    
+        db.session.commit()
+        flash('Demo video added successfully!', 'success')
+        return redirect(url_for('teacher_dashboard'))
 
 
 @app.route('/index')

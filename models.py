@@ -42,3 +42,44 @@ class Book(db.Model):
     rack_no = db.Column(db.Integer, nullable=False)
     no_book = db.Column(db.Integer, nullable=False)
     image = db.Column(db.String(200)) 
+
+    
+class Student(db.Model):
+    __tablename__ = 'students'  # Table name
+    sid = db.Column(db.Integer, primary_key=True)
+    sname = db.Column(db.String(25), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
+    clad = db.Column(db.String(30), nullable=False)
+    img = db.Column(db.String(50), nullable=False)
+    parent = db.relationship('User', backref='students')
+
+class DemoClass(db.Model):
+    __tablename__ = 'demo_class'  # Table name in the database
+
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    subject = db.Column(db.String(100), nullable=False)
+    class_details = db.Column(db.String(200), nullable=False)
+    video = db.Column(db.String(200), nullable=False)  # URL or path to video file
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)  # Foreign key to Teacher table
+    date = db.Column(db.Date, nullable=False)
+
+    # Relationship with the Teacher model
+    teacher = db.relationship('Teacher', backref='demo_classes')
+
+class DemoClassRequest(db.Model):
+    __tablename__ = 'demo_class_request'  # Table name in the database
+
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)  # Foreign key to Teacher table
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to Parent (User) table
+    student_id = db.Column(db.Integer, db.ForeignKey('student.sid'), nullable=False)  # Foreign key to Student table
+    demo_class_id = db.Column(db.Integer, db.ForeignKey('demo_class.id'), nullable=False)  # Foreign key to DemoClass table
+    date = db.Column(db.Date, nullable=False)
+    status = db.Column(db.String(50), nullable=False)  # Example: 'pending', 'approved', 'rejected'
+    class_link = db.Column(db.String(200))  # Optional class link (e.g., Zoom, Google Meet)
+
+    # Relationships
+    teacher = db.relationship('Teacher', backref='demo_requests')
+    parent = db.relationship('User', backref='demo_requests')
+    student = db.relationship('students', backref='demo_requests')
+    demo_class = db.relationship('DemoClass', backref='requests')

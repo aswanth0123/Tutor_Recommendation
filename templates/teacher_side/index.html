@@ -184,7 +184,7 @@ https://templatemo.com/tm-569-edu-meeting
       <div class="row">
         <div class="col-lg-12">
           <div class="section-heading">
-            <h2>Teachers List</h2>
+            <h2>Student Details</h2>
           </div>
         </div>
         <!-- <div class="col-lg-4">
@@ -211,6 +211,10 @@ https://templatemo.com/tm-569-edu-meeting
                   <div class="price">
                     <span>{{ teacher.available_days }}</span>
                   </div>
+
+
+
+                  
                   <a href="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" target="_blank"><img src="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" alt="New Lecturer Meeting" height="300px"></a>
                 </div>
                 <div class="down-content">
@@ -716,26 +720,26 @@ https://templatemo.com/tm-569-edu-meeting
         <div class="col-lg-9 align-self-center">
           <div class="row">
             <div class="col-lg-12">
-              <form id="contact" action="add_std" method="post" enctype="multipart/form-data">
+              <form id="contact" action="add_demo_video" method="post" enctype="multipart/form-data">
                 <div class="row">
                   <div class="col-lg-12">
-                    <h2>Add your child</h2>
+                    <h2>Add your Demo videos</h2>
                   </div>
                   <div class="col-lg-4">
                     <fieldset>
-                      <input name="name" type="text" id="name" placeholder="StudentName...*" required="">
+                      <input name="subject" type="text" id="name" placeholder="Subject...*" required="">
                     </fieldset>
                   </div>
                   <div class="col-lg-4">
                     <fieldset>
-                    <input name="class" type="text" id="email"  placeholder="CLASS..." required="">
+                    <input name="class_details" type="text" id="email"  placeholder="Class details..." required="">
                   </fieldset>
                   </div>
     
                   <div class="col-lg-12">
                     <fieldset>
                       <label for="upload" class="btn btn-primary " tabindex="0">
-                        <span class="d-none d-sm-block">Upload Student image</span>
+                        <span class="d-none d-sm-block">Upload Demo video</span>
                         <i class="bx bx-upload d-block d-sm-none"></i>
                         <input
                           type="file"
@@ -751,7 +755,7 @@ https://templatemo.com/tm-569-edu-meeting
                   </div>
                   <div class="col-lg-12 mt-5">
                     <fieldset>
-                      <button type="submit" id="form-submit" class="button">Register</button>
+                      <button type="submit" id="form-submit" class="button">Add</button>
                     </fieldset>
                   </div>
                 </div>
