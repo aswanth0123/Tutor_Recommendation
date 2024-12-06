@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="TemplateMo">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <title>Education Meeting HTML5 Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static',filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/templatemo-edu-meeting.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/owl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/lightbox.css') }}">
+<!--
+
+TemplateMo 569 Edu Meeting
+
+https://templatemo.com/tm-569-edu-meeting
+
+-->
+  </head>
+
+  <body>
+
+    <!-- Sub Header -->
+    <div class="sub-header">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-sm-8">
+            <div class="left-content">
+              <p>This is an educational <em>HTML CSS</em> template by TemplateMo website.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-4">
+            <div class="right-icons">
+              <ul>
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">
+                            Edu Meeting
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="index.html" class="active">Home</a></li>
+                            <li><a href="view_students.html">View Students</a></li>
+                            <li><a href="techer_view_review.html">View Review</a></li>
+                          <!-- *****   <li class="scroll-to-section"><a href="#apply">Apply Now</a></li>
+                            <li class="has-sub">
+                                <a href="javascript:void(0)">Pages</a>
+                                <ul class="sub-menu">
+                                    <li><a href="meetings.html">Upcoming Meetings</a></li>
+                                    <li><a href="meeting-details.html">Meeting Details</a></li>
+                                </ul>
+                            </li>
+                            <li class="scroll-to-section"><a href="#courses">Courses</a></li> 
+                            <li class="scroll-to-section"><a href="#contact">Contact Us</a></li>  ***** -->
+                            <li class=""><a href="parent_teacher_logout">Logout</a></li> 
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+     <!-- ***** Main Banner Area Start ***** -->
+    <section class="section main-banner" id="top" data-section="section1">
+        <video autoplay muted loop id="bg-video">
+            <source src="{{ url_for('static',filename='assets/images/course-video.mp4') }}" type="video/mp4" />
+        </video>
+
+        <!-- ***** Main card Area Start ***** -->
+        <div class="video-overlay header-text">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="video-overlay header-text">
+                            <div class="container" >
+                                <div class="row text-center">
+                                  <!-- user view Cards -->
+                                  <div class="col-lg-3 col-md-6 col-sm-12 mb-4 student-card-container">
+                                    <div class="student-card">
+                                      <!-- Top Half: User Profile Image -->
+                                      <div class="student-image">
+                                        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-image">
+                                      </div>
+                                      <!-- Bottom Half: Details -->
+                                      <div class="student-content">
+                                        <h5 class="student-name">John Doe</h5>
+                                        <p class="student-text">Class: 8A</p>
+                                        <button class="btn view-details-btn">View Details</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-lg-3 col-md-6 col-sm-12 mb-4 student-card-container">
+                                    <div class="student-card">
+                                      <!-- Top Half: User Profile Image -->
+                                      <div class="student-image">
+                                        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-image">
+                                      </div>
+                                      <!-- Bottom Half: Details -->
+                                      <div class="student-content">
+                                        <h5 class="student-name">John Doe</h5>
+                                        <p class="student-text">Class: 8A</p>
+                                        <button class="btn view-details-btn">View Details</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-lg-3 col-md-6 col-sm-12 mb-4 student-card-container">
+                                    <div class="student-card">
+                                      <!-- Top Half: User Profile Image -->
+                                      <div class="student-image">
+                                        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-image">
+                                      </div>
+                                      <!-- Bottom Half: Details -->
+                                      <div class="student-content">
+                                        <h5 class="student-name">John Doe</h5>
+                                        <p class="student-text">Class: 8A</p>
+                                        <button class="btn view-details-btn">View Details</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="col-lg-3 col-md-6 col-sm-12 mb-4 student-card-container">
+                                    <div class="student-card">
+                                      <!-- Top Half: User Profile Image -->
+                                      <div class="student-image">
+                                        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-image">
+                                      </div>
+                                      <!-- Bottom Half: Details -->
+                                      <div class="student-content">
+                                        <h5 class="student-name">John Doe</h5>
+                                        <p class="student-text">Class: 8A</p>
+                                        <button class="btn view-details-btn">View Details</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  <!-- More Hidden Cards -->
+                                  <div class="col-lg-3 col-md-6 col-sm-12 mb-4 student-card-container hidden">
+                                    <div class="student-card">
+                                      <!-- Top Half: User Profile Image -->
+                                      <div class="student-image">
+                                        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-image">
+                                      </div>
+                                      <!-- Bottom Half: Details -->
+                                      <div class="student-content">
+                                        <h5 class="student-name">Chris Johnson</h5>
+                                        <p class="student-text">Class: 9B</p>
+                                        <button class="btn view-details-btn">View Details</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  
+                                  <div class="col-lg-3 col-md-6 col-sm-12 mb-4 student-card-container hidden">
+                                    <div class="student-card">
+                                      <!-- Top Half: User Profile Image -->
+                                      <div class="student-image">
+                                        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-image">
+                                      </div>
+                                      <!-- Bottom Half: Details -->
+                                      <div class="student-content">
+                                        <h5 class="student-name">Chris Johnson</h5>
+                                        <p class="student-text">Class: 9B</p>
+                                        <button class="btn view-details-btn">View Details</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  
+                                </div>
+                                <!-- View All and View Less Buttons -->
+                                <div class="text-center mt-4">
+                                  <button id="userview-toggleButton" class="btn btn-warning">View All</button>
+                                </div>
+                            </div>
+                              
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ***** Main Card Area End ***** -->
+
+    </section>
+    <!-- ***** Main Banner Area End ***** -->
+
+
+<script>
+document.getElementById("userview-toggleButton").addEventListener("click", function () {
+  const hiddenCards = document.querySelectorAll(".student-card-container.hidden");
+  const button = document.getElementById("userview-toggleButton");
+
+  // Check if the hidden cards are currently displayed
+  if (Array.from(hiddenCards).some((card) => card.style.display === "none" || card.style.display === "")) {
+    // Show all hidden cards
+    hiddenCards.forEach((card) => {
+      card.style.display = "block";
+    });
+
+    // Change button text to "View Less"
+    button.innerText = "View Less";
+  } else {
+    // Hide the additional cards
+    hiddenCards.forEach((card) => {
+      card.style.display = "none";
+    });
+
+    // Change button text to "View All"
+    button.innerText = "View All";
+  }
+});
+
+
+
+</script>
+</body>
+</html>
