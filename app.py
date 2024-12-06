@@ -274,8 +274,8 @@ def parent_dashboard():
         return redirect(url_for('parent_teacher_login'))
     teacher=Teacher.query.all()
     student=Student.query.filter_by(parent_id=session['user_id']).all()
-    print(student)
-    return render_template('parent_side/index.html',teachers=teacher,students=student)
+    books=Book.query.all()
+    return render_template('parent_side/index.html',teachers=teacher,students=student,books=books)
 
 
 
@@ -320,8 +320,44 @@ def add_std():
         return redirect(url_for('parent_dashboard'))
 
 
-     
+@app.route('/parent_demo_class_request/<int:teacher_id>', methods=['GET', 'POST'])
+def parent_demo_class_request(teacher_id):
+    if request.method == 'POST':
+        teacher=Teacher.query.get(teacher_id)
+        parent=User.query.get(session['user_id'])
+        student_id=request.form['Student']
+        print(student_id,'student id '*4)
+        date=datetime.datetime.now().strftime('%Y-%m-%d')
+        status='pending'
+        class_link=None
+        demo_class_request = DemoClassRequest(teacher_id=teacher_id, parent_id=parent.id, student_id=student_id, demo_class_id=None, date=date, status=status, class_link=class_link)
+        db.session.add(demo_class_request)
+        db.session.commit()
+        flash('Demo class request submitted successfully!', 'success')
+        return redirect(url_for('parent_dashboard'))
+    
+@app.route('/demo_class_request')
+def demo_class_request():
+    parent=User.query.get(session['user_id'])
+    demo_class_requests = DemoClassRequest.query.filter_by(parent_id=parent.id).all()
+    return render_template('parent_side/demo_class_request.html', demo_class_requests=demo_class_requests)
 
+@app.route('/parent_book_boookings/<int:book_id>')
+def parent_book_boookings(book_id):
+    book=Book.query.get(book_id)
+    parent=User.query.get(session['user_id'])
+    date=datetime.datetime.now().strftime('%Y-%m-%d')
+    status='pending'
+    book_request = BookBookings(parent_id=parent.id, book_id=book_id, date=date, status=status)
+    db.session.add(book_request)
+    db.session.commit()
+    flash('Book request submitted successfully!', 'success')
+    return redirect(url_for('parent_dashboard'))
+
+@app.route('/book_teacher')
+def book_tecaher():
+    return render_template('parent_side/teacher_booking.html')
+    
 
 
 
@@ -332,7 +368,8 @@ def teacher_dashboard():
     if 'teacher_id' not in session:
         return redirect(url_for('teacher_login'))
     teacher=Teacher.query.get(session['teacher_id'])
-    return render_template('teacher_side/index.html',teacher=teacher)
+    book=Book.query.all()
+    return render_template('teacher_side/index.html',teacher=teacher,books=book)
 
 
 @app.route('/add_demo_video', methods=['GET', 'POST'])
@@ -353,11 +390,44 @@ def add_demo_video():
         flash('Demo video added successfully!', 'success')
         return redirect(url_for('teacher_dashboard'))
 
+@app.route('/view_demo_class_requests')
+def view_demo_class_requests():
+    teacher=Teacher.query.get(session['teacher_id'])
+    demo=DemoClassRequest.query.filter_by(teacher_id=teacher.id)
+    demo_class=DemoClass.query.filter_by(teacher_id=teacher.id)
+    print(demo)
+    return render_template('teacher_side/demo_class_request.html',demo_class_requests=demo,demo_class=demo_class)
+
+@app.route('/assign_demo_class/<req_id>',methods=['POST'])
+def Assign_demo_class(req_id):
+    if request.method=='POST':
+        demo_class_request=DemoClassRequest.query.get(req_id)
+        demo_class_request.demo_class_id=request.form['demo_class']
+        demo_class_request.class_link=request.form['link']
+        demo_class_request.status='accepted'
+        db.session.commit()
+        return redirect(url_for('view_demo_class_requests'))
+
+@app.route('/teacher_book_requests/<int:book_id>')
+def teacher_book_requests(book_id):
+    book=Book.query.get(book_id)
+    teacher=Teacher.query.get(session['teacher_id'])
+    date=datetime.datetime.now().strftime('%Y-%m-%d')
+    status='pending'
+    book_request = BookBookings(teacher_id=teacher.id, book_id=book_id, date=date, status=status)
+    db.session.add(book_request)
+    db.session.commit()    
+    return redirect(url_for('teacher_dashboard'))
+
+
+
 
 @app.route('/index')
 def index():
 
+    
     return render_template('index.html')
+
 
 
 # Run the app

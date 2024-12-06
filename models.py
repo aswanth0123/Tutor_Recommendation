@@ -72,14 +72,27 @@ class DemoClassRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # Primary key
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)  # Foreign key to Teacher table
     parent_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to Parent (User) table
-    student_id = db.Column(db.Integer, db.ForeignKey('student.sid'), nullable=False)  # Foreign key to Student table
-    demo_class_id = db.Column(db.Integer, db.ForeignKey('demo_class.id'), nullable=False)  # Foreign key to DemoClass table
+    student_id = db.Column(db.Integer, db.ForeignKey('students.sid'), nullable=False)  # Foreign key to Student table
+    demo_class_id = db.Column(db.Integer, db.ForeignKey('demo_class.id'), nullable=True)  # Foreign key to DemoClass table
     date = db.Column(db.Date, nullable=False)
     status = db.Column(db.String(50), nullable=False)  # Example: 'pending', 'approved', 'rejected'
-    class_link = db.Column(db.String(200))  # Optional class link (e.g., Zoom, Google Meet)
+    class_link = db.Column(db.String(200),nullable=True)  # Optional class link (e.g., Zoom, Google Meet)
 
     # Relationships
     teacher = db.relationship('Teacher', backref='demo_requests')
     parent = db.relationship('User', backref='demo_requests')
-    student = db.relationship('students', backref='demo_requests')
+    student = db.relationship('Student', backref='demo_requests')
     demo_class = db.relationship('DemoClass', backref='requests')
+
+
+class BookBookings(db.Model):
+    __tablename__ = 'book_bookings'
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Foreign key to Parent (User) table
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    status=db.Column(db.String(50), nullable=False)
+
+    teacher = db.relationship('Teacher', backref='book_bookings')
+    parent = db.relationship('User', backref='book_bookings')
