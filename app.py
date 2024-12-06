@@ -430,6 +430,20 @@ def index():
 
 
 
+@app.route('/teacher_view_review')
+def teacher_view_review():
+    if 'teacher_id' not in session:
+        return redirect(url_for('teacher_login'))
+
+    return render_template('teacher_side/teacher_view_review.html')
+
+@app.route('/teacher_view_students')
+def teacher_view_students():
+    if 'teacher_id' not in session:
+        return redirect(url_for('teacher_login'))
+
+    return render_template('teacher_side/teacher_view_students.html')
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True)
