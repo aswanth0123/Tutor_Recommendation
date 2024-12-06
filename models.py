@@ -96,3 +96,18 @@ class BookBookings(db.Model):
 
     teacher = db.relationship('Teacher', backref='book_bookings')
     parent = db.relationship('User', backref='book_bookings')
+
+
+class TeacherBookings(db.Model):
+    __tablename__ = 'teacher_bookings'
+    id = db.Column(db.Integer, primary_key=True)
+    demo_class_request_id = db.Column(db.Integer, db.ForeignKey('demo_class_request.id'), nullable=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Foreign key to Parent (User) table
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=True)
+    date = db.Column(db.Date, nullable=False)
+    status=db.Column(db.String(50), nullable=False)
+    time=db.Column(db.String(50), nullable=True)
+
+    teacher = db.relationship('Teacher', backref='teacher_bookings')
+    parent = db.relationship('User', backref='teacher_bookings')
+    demo_class_request = db.relationship('DemoClassRequest', backref='teacher_bookings')

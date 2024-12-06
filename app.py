@@ -77,31 +77,36 @@ def add_teacher():
         teaching_class = request.form['teaching_class']
 
         file = request.files['file']
-        if file and file.filename != '':
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        else:
-            flash('No file uploaded.', 'danger')
-            return redirect(request.url)
+
 
         # Create and save new teacher instance
-        new_teacher = Teacher(
-            name=name,
-            phone_number=phone_number,
-            email=email,
-            subject=subject,
-            whatsapp_number=whatsapp_number,
-            address=address,
-            place=place,
-            facebook_link=facebook_link,
-            available_time=available_time,
-            available_days=available_days,
-            teaching_class=teaching_class,
-            file_name=filename  # Save the file name/path in the database
-        )
+        try:
+            if file and file.filename != '':
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                flash('No file uploaded.', 'danger')
+                return redirect(request.url)
+            new_teacher = Teacher(
+                name=name,
+                phone_number=phone_number,
+                email=email,
+                subject=subject,
+                whatsapp_number=whatsapp_number,
+                address=address,
+                place=place,
+                facebook_link=facebook_link,
+                available_time=available_time,
+                available_days=available_days,
+                teaching_class=teaching_class,
+                file_name=filename  # Save the file name/path in the database
+            )
 
-        db.session.add(new_teacher)
-        db.session.commit()
+            db.session.add(new_teacher)
+            db.session.commit()
+        except:
+            return "<script>alert('Teacher details already exists!');window.location='/add_teacher';</script>"
+
         flash('Teacher registered successfully!', 'success')
         return redirect(url_for('add_teacher'))
     return render_template('admin_side/add_teacher.html')
@@ -231,7 +236,44 @@ def delete_book(book_id):
     flash('Book deleted successfully!', 'success')    
     return redirect(url_for('admin_view_books'))
 
+@login_required
+@app.route('/view_parent')
+def view_parent():
+    parents = User.query.all()
+    return render_template('admin_side/view_parents.html', parents=parents)
 
+
+@login_required 
+@app.route('/view_demo_class')
+def view_demo_class():
+    demo_class = DemoClass.query.all()
+    return render_template('admin_side/view_demo_class.html', Demo_class=demo_class)
+
+
+@login_required
+@app.route('/view_book_requests')
+def view_book_requests():
+    book_requests = BookBookings.query.all()
+    return render_template('admin_side/book_request.html', book_requests=book_requests)
+
+
+@login_required
+@app.route('/accept_book_request/<int:request_id>')
+def accept_book_request(request_id):
+    request = BookBookings.query.get_or_404(request_id)
+    request.status = 'accepted'
+    db.session.commit()
+    flash('Book request accepted successfully!', 'success')
+    return redirect(url_for('view_book_requests'))
+
+@login_required
+@app.route('/reject_book_request/<int:request_id>')
+def reject_book_request(request_id):
+    request = BookBookings.query.get_or_404(request_id)
+    request.status = 'rejected'
+    db.session.commit()
+    flash('Book request rejected successfully!', 'success')
+    return redirect(url_for('view_book_requests'))
 
 
 #------------------------------parent--------------------------------------
@@ -354,9 +396,21 @@ def parent_book_boookings(book_id):
     flash('Book request submitted successfully!', 'success')
     return redirect(url_for('parent_dashboard'))
 
-@app.route('/book_teacher')
-def book_tecaher():
-    return render_template('parent_side/teacher_booking.html')
+@app.route('/book_teacher',methods=['GET', 'POST'])
+def book_teacher():
+    if request.method == 'POST':
+        demo_class_request_id=request.form['demo_class_request_id']
+        parent_id=session['user_id']
+        teacher_id=request.form['teacher']
+        date=datetime.datetime.now().strftime('%Y-%m-%d')
+        status='pending'
+        book_request = TeacherBookings(demo_class_request_id=demo_class_request_id, parent_id=parent_id, teacher_id=teacher_id, date=date, status=status)
+        db.session.add(book_request)
+        db.session.commit()
+        flash('Book request submitted successfully!', 'success')
+        return redirect(url_for('book_teacher'))
+    teacher_bookings=TeacherBookings.query.filter_by(parent_id=session['user_id']).all()
+    return render_template('parent_side/teacher_booking.html',teacher_bookings=teacher_bookings)
     
 
 
@@ -419,7 +473,30 @@ def teacher_book_requests(book_id):
     db.session.commit()    
     return redirect(url_for('teacher_dashboard'))
 
+@app.route('/bookings',methods=['GET', 'POST'])
+def bookings():
+    if request.method == 'POST':
+        time=request.form['time']
+        booking_id=request.form['booking_id']
+        bookings=TeacherBookings.query.get(booking_id)
+        bookings.time=time
+        bookings.status='accepted'
+        db.session.commit()
+        return redirect(url_for('bookings'))
+    teacher=Teacher.query.get(session['teacher_id'])
+    teacher_bookings=TeacherBookings.query.filter_by(teacher_id=teacher.id).all()
+    return render_template('teacher_side/bookings.html',teacher_bookings=teacher_bookings)
 
+
+@app.route('/reject_teacher_bookings/<int:booking_id>')
+def reject_teacher_bookings(booking_id):
+    booking=TeacherBookings.query.get(booking_id)
+    print(booking_id)
+
+    print(booking)
+    booking.status='rejected'
+    db.session.commit()
+    return redirect(url_for('bookings'))
 
 
 @app.route('/index')
