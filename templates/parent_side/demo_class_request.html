@@ -139,40 +139,14 @@ https://templatemo.com/tm-569-edu-meeting
                       {% if demo.demo_class_id %}
                       <p>Demo Video : <a href="{{ url_for('static', filename='uploads/' + demo.demo_class.video) }}" target="_blank">Click Here</a></p>
                       <p>Class Link : <a href="{{demo.class_link}}" target="_blank">Click Here</a></p>
-                      <p><button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-outline-primary">Book Tutor</button></p>
+                      <p><a href="book_teacher/{{demo.id}}/{{demo.teacher.id}}" onclick="return confirm('Are you sure you want to book this teacher?')">Book Tutor</a></p>
 
                       {% endif %}
 
                     </div>
                   </div>
                 </div>
-                <div class="modal fade" id="myModal">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                
-                      <!-- Modal Header -->
-                      <div class="modal-header">
-                        <h4 class="modal-title">Modal Heading</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                      </div>
-                      <form action="book_teacher" method="post">
-                        <input type="text" name="demo_class_request_id" value="{{demo.id}}" hidden>
-                        <input type="text" name="teacher" value="{{demo.teacher.id}}" hidden>
-                
-                      <!-- Modal body -->
-                      <div class="modal-body">
-                        Are you want to book this teacher ?
-                      </div>
-                 
-                      <!-- Modal footer -->
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger" >Confirm</button>
-                      </div>
-                    </form>
-                
-                    </div>
-                  </div>
-                </div> 
+
                 {% endfor %}
 
               

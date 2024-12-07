@@ -301,6 +301,7 @@ def parent_teacher_login():
             return redirect(url_for('teacher_dashboard'))
         else:
             flash('Invalid email or password', 'danger')
+            return "<script>alert('Invalid email or password');window.location='/';</script>"
     
     return render_template('login.html')
 
@@ -331,18 +332,21 @@ def parent_register():
         password = bcrypt.generate_password_hash(request.form['pwd'])  # Hashing the password for security
         
         # Create new user instance
-        new_user = User(
-            name=name,
-            email=email,
-            phone_number=phone_number,
-            address=address,
-            password=password
-        )
-        
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Registration successful!', 'success')
-        return redirect(url_for('parent_register'))
+        try:
+            new_user = User(
+                name=name,
+                email=email,
+                phone_number=phone_number,
+                address=address,
+                password=password
+            )
+            
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful!', 'success')
+        except:
+            return "<script>alert('Email already exists');window.location='/';</script>"
+        return redirect(url_for('parent_teacher_login'))
 
 @app.route('/add_std', methods=['GET', 'POST'])
 def add_std():
@@ -396,23 +400,45 @@ def parent_book_boookings(book_id):
     flash('Book request submitted successfully!', 'success')
     return redirect(url_for('parent_dashboard'))
 
-@app.route('/book_teacher',methods=['GET', 'POST'])
-def book_teacher():
-    if request.method == 'POST':
-        demo_class_request_id=request.form['demo_class_request_id']
+@app.route('/book_teacher/<int:demo_class_request_id>/<int:teacher_id>',methods=['GET', 'POST'])
+def book_teacher(demo_class_request_id,teacher_id):
         parent_id=session['user_id']
-        teacher_id=request.form['teacher']
         date=datetime.datetime.now().strftime('%Y-%m-%d')
         status='pending'
         book_request = TeacherBookings(demo_class_request_id=demo_class_request_id, parent_id=parent_id, teacher_id=teacher_id, date=date, status=status)
         db.session.add(book_request)
         db.session.commit()
         flash('Book request submitted successfully!', 'success')
-        return redirect(url_for('book_teacher'))
+        return redirect(url_for('parent_view_teacher_bookings'))
+
+@app.route('/parent_view_teacher_bookings')
+def parent_view_teacher_bookings():
     teacher_bookings=TeacherBookings.query.filter_by(parent_id=session['user_id']).all()
     return render_template('parent_side/teacher_booking.html',teacher_bookings=teacher_bookings)
-    
 
+@app.route('/mark_review',methods=['GET', 'POST'])
+def mark_review():
+    if request.method == 'POST':
+        teacher=request.form['teacher']
+        rateing1=rateing2=rateing3=rateing4=rateing5=False
+        comment=request.form['review']
+        if request.form.get('star1'):
+            rateing1=True
+        if request.form.get('star2'):
+            rateing2=True
+        if request.form.get('star3'):
+            rateing3=True
+        if request.form.get('star4'):
+            rateing4=True
+        if request.form.get('star5'):
+            rateing5=True
+        review=Review(rateing1=rateing1,rateing2=rateing2,rateing3=rateing3,rateing4=rateing4,rateing5=rateing5,comments=comment,user_id=session['user_id'],teacher_id=teacher)
+        db.session.add(review)
+        db.session.commit()
+        if comment and rateing1 and rateing2 and rateing3 and rateing4 and rateing5:
+            print(comment,rateing1,rateing2,rateing3,rateing4,rateing5)
+
+        return redirect(url_for('_dashboard'))
 
 
 #------------------------------teacher--------------------------------------
@@ -478,6 +504,7 @@ def bookings():
     if request.method == 'POST':
         time=request.form['time']
         booking_id=request.form['booking_id']
+        print(booking_id)
         bookings=TeacherBookings.query.get(booking_id)
         bookings.time=time
         bookings.status='accepted'
@@ -498,12 +525,12 @@ def reject_teacher_bookings(booking_id):
     db.session.commit()
     return redirect(url_for('bookings'))
 
-
-@app.route('/index')
-def index():
-
-    
-    return render_template('index.html')
+@app.route('/reject_demo_class_request/<req_id>')   
+def reject_demo_class_request(req_id):
+    demo_class_request=DemoClassRequest.query.get(req_id)
+    demo_class_request.status='rejected'
+    db.session.commit()
+    return redirect(url_for('view_demo_class_requests'))
 
 
 

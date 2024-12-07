@@ -111,3 +111,22 @@ class TeacherBookings(db.Model):
     teacher = db.relationship('Teacher', backref='teacher_bookings')
     parent = db.relationship('User', backref='teacher_bookings')
     demo_class_request = db.relationship('DemoClassRequest', backref='teacher_bookings')
+
+
+class Review(db.Model):
+    __tablename__ = 'review'
+
+    id = db.Column(db.Integer, primary_key=True)
+    rateing1 = db.Column(db.Boolean, default=False)
+    rateing2 = db.Column(db.Boolean, default=False)
+    rateing3 = db.Column(db.Boolean, default=False)
+    rateing4 = db.Column(db.Boolean, default=False)
+    rateing5 = db.Column(db.Boolean, default=False)
+    comments = db.Column(db.Text, nullable=True)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to User table
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)  # Foreign key to Teacher table
+
+    # Relationships
+    user = db.relationship('User', backref='reviews')
+    teacher = db.relationship('Teacher', backref='reviews')

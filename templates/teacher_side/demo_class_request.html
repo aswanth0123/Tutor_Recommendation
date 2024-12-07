@@ -137,7 +137,7 @@ https://templatemo.com/tm-569-edu-meeting
                       <p>Teacher Name : {{demo.teacher.name}}</p>
                       <p>Date : {{demo.date}}</p>
                       {% if demo.status == 'pending' %}
-                      <p><button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-outline-primary">Accept OR Reject</button></p>
+                      <p><button type="button" data-bs-toggle="modal" data-bs-target="#{{demo.id}}" class="btn btn-outline-primary">Accept OR Reject</button></p>
 
                       {% endif %}
 
@@ -149,7 +149,7 @@ https://templatemo.com/tm-569-edu-meeting
                     </div>
                   </div>
                 </div>
-                <div class="modal fade" id="myModal">
+                <div class="modal fade" id="{{demo.id}}">
                   <div class="modal-dialog">
                     <div class="modal-content">
                 
@@ -175,7 +175,7 @@ https://templatemo.com/tm-569-edu-meeting
                  
                       <!-- Modal footer -->
                       <div class="modal-footer">
-                        <a href="" class="btn btn-danger" >Reject</a>
+                        <a href="reject_demo_class_request/{{demo.id}}" class="btn btn-danger" >Reject</a>
                         <button type="submit" class="btn btn-info" >Assign</button>
                       </div>
                     </form>

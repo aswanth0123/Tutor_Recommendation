@@ -130,14 +130,24 @@ https://templatemo.com/tm-569-edu-meeting
                       <div class="price">
                         <span>{{bookings.status}}</span>
                       </div>
-                      <a href="meeting-details.html"><img src="{{ url_for('static' ,filename='assets/images/meeting-01.jpg') }}" alt=""></a>
+                      <a href=""><img src="{{ url_for('static' ,filename='assets/images/meeting-01.jpg') }}" alt=""></a>
                     </div>
                     <div class="down-content">
+                      <p>id:{{bookings.id}}</p>
                       <p>Teacher Name : {{bookings.teacher.name}}</p>
                       <p>Date : {{bookings.date}}</p>
                       <p>Student Name : {{bookings.demo_class_request.student.sname}}</p>
+
                       {% if bookings.status=='pending' %}
-                      <p><button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-outline-primary">Accept OR Reject</button></p>
+                      <!-- <form action="" method="post">
+                        <p><input type="text" name="time" id="" placeholder="Class Time 7:00-8:00" class="form-control" required></p>
+                        <input type="text" name="booking_id" readonly hidden value="{{bookings.id}}" id="">
+                        <p><input type="submit" value="Accept" class="btn btn-primary mt-3"></p>
+                      </form> -->
+                      <p><button type="button" data-bs-toggle="modal" data-bs-target="#{{bookings.id}}" class="btn btn-outline-primary">Accept OR Reject</button></p>
+
+                 
+                      
                       {% else %}
                       <p>Time: {{bookings.time}}</p>
                       {% endif %}
@@ -145,31 +155,31 @@ https://templatemo.com/tm-569-edu-meeting
                     </div>
                   </div>
                 </div>
-                <div class="modal fade" id="myModal">
+                <div class="modal fade" id="{{bookings.id}}">
                   <div class="modal-dialog">
                     <div class="modal-content">
                 
                       <!-- Modal Header -->
                       <div class="modal-header">
-                        <h4 class="modal-title">Assign Time And Accept</h4>
+                        <h4 class="modal-title">Modal Heading</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                       </div>
                       <form action="" method="post">
                 
                       <!-- Modal body -->
                       <div class="modal-body">
-                        
-                        <input type="text" name="time" id="" placeholder="Class Time 7:00-8:00" class="form-control mt-2" required>
+                        <input type="text" name="time" id="" placeholder="Class Time 7:00-8:00" class="form-control" required>
                         <input type="text" name="booking_id" readonly hidden value="{{bookings.id}}" id="">
+                        <input type="text" name="link" id="" placeholder="Online session Link" class="form-control mt-2" required>
                       </div>
                  
                       <!-- Modal footer -->
                       <div class="modal-footer">
+                        <a href="reject_teacher_bookings/{{bookings.id}}" class="btn btn-danger" >Reject</a>
                         <button type="submit" class="btn btn-info" >Assign</button>
                       </div>
                     </form>
-                    <a href="reject_teacher_bookings/{{bookings.id}}" class="btn btn-danger" >Reject</a>
-
+                
                     </div>
                   </div>
                 </div> 

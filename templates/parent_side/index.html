@@ -73,7 +73,7 @@ https://templatemo.com/tm-569-edu-meeting
                           <li class="scroll-to-section"><a href="#books">E-books</a></li>
                     
                           <li class="scroll-to-section"><a href="#courses">Collected E-books</a></li> 
-                          <li><a href="../book_teacher">Booking Details</a></li> 
+                          <li><a href="../parent_view_teacher_bookings">Booking Details</a></li> 
                           <li class="scroll-to-section"><a href="#contact">Add student</a></li> 
                           <li class=""><a href="parent_teacher_logout">Logout</a></li> 
                       </ul>        
@@ -236,7 +236,7 @@ https://templatemo.com/tm-569-edu-meeting
                             <p>Place : {{teacher.place}}</p>
                             <p>Address : {{teacher.address}}</p>
                             <a rel="nofollow" href="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" target="_blank">View Certificate</a>
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-outline-primary">Request Demo Class</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#{{teacher.id}}" class="btn btn-outline-primary">Request Demo Class</button>
                      
                         </div>
                     </div>
@@ -282,7 +282,7 @@ https://templatemo.com/tm-569-edu-meeting
                 </article>
             </div>
             </div>    
-            <div class="modal fade" id="myModal">
+            <div class="modal fade" id="{{teacher.id}}">
               <div class="modal-dialog">
                 <div class="modal-content">
             
