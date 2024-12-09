@@ -96,6 +96,7 @@ class BookBookings(db.Model):
 
     teacher = db.relationship('Teacher', backref='book_bookings')
     parent = db.relationship('User', backref='book_bookings')
+    book = db.relationship('Book', backref='book_bookings')
 
 
 class TeacherBookings(db.Model):

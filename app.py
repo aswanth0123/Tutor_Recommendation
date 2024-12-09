@@ -451,7 +451,9 @@ def teacher_dashboard():
         return redirect(url_for('teacher_login'))
     teacher=Teacher.query.get(session['teacher_id'])
     book=Book.query.all()
-    return render_template('teacher_side/index.html',teacher=teacher,books=book)
+    book_bookings=BookBookings.query.filter_by(teacher_id=teacher.id).all()
+    bookings=TeacherBookings.query.filter_by(teacher_id=teacher.id,status='accepted').all()
+    return render_template('teacher_side/index.html',teacher=teacher,books=book,book_bookings=book_bookings,bookings=bookings)
 
 
 @app.route('/add_demo_video', methods=['GET', 'POST'])

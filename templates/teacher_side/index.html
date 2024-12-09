@@ -61,24 +61,19 @@ https://templatemo.com/tm-569-edu-meeting
               <div class="col-12">
                   <nav class="main-nav">
                       <!-- ***** Logo Start ***** -->
-                      <a href="index.html" class="logo">
+                      <a href="teacher_dashboard" class="logo">
                           Edu Meeting
                       </a>
                       <!-- ***** Logo End ***** -->
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
-                          <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+                          <li class="scroll-to-section"><a href="teacher_dashboard" class="active">Home</a></li>
                           <li><a href="view_demo_class_requests">Demo Class</a></li>
-                          <li class="scroll-to-section"><a href="#apply">Apply Now</a></li>
-                          <li class="has-sub">
-                              <a href="javascript:void(0)">Pages</a>
-                              <ul class="sub-menu">
-                                  <li><a href="meetings.html">Upcoming Meetings</a></li>
-                                  <li><a href="meeting-details.html">Meeting Details</a></li>
-                              </ul>
-                          </li>
-                          <li ><a href="bookings">bookings</a></li> 
-                          <li class="scroll-to-section"><a href="#contact">Contact Us</a></li> 
+                          <li class="scroll-to-section"><a href="#books">E-Books</a></li>
+                          <li ><a href="bookings">Booking Details</a></li> 
+                          <li ><a href="bookings">E-Book Bookings</a></li> 
+                          <li ><a href="teacher_view_reviews">Reviews</a></li> 
+                          <li class="scroll-to-section"><a href="#contact">Add Demo Class</a></li> 
                           <li class=""><a href="parent_teacher_logout">Logout</a></li> 
                       </ul>        
                       <a class='menu-trigger'>
@@ -204,47 +199,23 @@ https://templatemo.com/tm-569-edu-meeting
         </div> -->
         <div class="col-lg-12">
           <div class="row">
-            {%  for teacher in teachers %}
-            <!-- <div class="col-lg-4">
-              <div class="meeting-item">
-                <div class="thumb">
-                  <div class="price">
-                    <span>{{ teacher.available_days }}</span>
-                  </div>
+            {%  for teacher in bookings %}
 
-
-
-                  
-                  <a href="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" target="_blank"><img src="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" alt="New Lecturer Meeting" height="300px"></a>
-                </div>
-                <div class="down-content">
-                 
-                  <a href="meeting-details.html" style="display: block;"><h4 text-align="center">{{teacher.name}}</h4></a>
-                  <p>Subject : {{ teacher.subject }} </p>
-                  <p>Class : {{ teacher.teaching_class }} </p>
-                  <div class="date">
-                    <h6>{{ teacher.available_time }}</h6>
-                    <h6>{{ teacher.available_days }}</h6>
-                  </div>
-                </div>
-              </div>
-            </div>        -->
             <div class="col-lg-4">
               <div class="accordions is-first-expanded">
                 <article class="accordion">
                     <div class="accordion-head">
-                        <span>Teacher Profile</span>
+                        <span>Student Profile</span>
                         <span class="icon">
                             <i class="icon fa fa-chevron-right"></i>
                         </span>
                     </div>
                     <div class="accordion-body">
                         <div class="content">
-                            <p>Name : {{teacher.name}}</p>
-                            <p>Place : {{teacher.place}}</p>
-                            <p>Address : {{teacher.address}}</p>
-                            <a rel="nofollow" href="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" target="_blank">View Certificate</a>
-                            <p><a href="">Request Demo Class</a></p>
+                            <p>Name : {{teacher.demo_class_request.student.sname}}</p>
+                            <p>Name : {{teacher.demo_class_request.demo_class.subject}}</p>
+                            <p>Name : {{teacher.demo_class_request.demo_class.class_details}}</p>
+                            
                         </div>
                     </div>
                 </article>
@@ -253,38 +224,30 @@ https://templatemo.com/tm-569-edu-meeting
                         <span>Days and Times</span>
                         <span class="icon">
                             <i class="icon fa fa-chevron-right"></i>
+
                         </span>
                     </div>
                     <div class="accordion-body">
                         <div class="content">
-                            <p>{{teacher.available_days}} <br> {{teacher.available_time}}</p>
-                        </div>
-                    </div>
-                </article>
-                <article class="accordion">
-                    <div class="accordion-head">
-                        <span>Subject And Class</span>
-                        <span class="icon">
-                            <i class="icon fa fa-chevron-right"></i>
-                        </span>
-                    </div>
-                    <div class="accordion-body">
-                        <div class="content">
-                            <p>Subject : {{ teacher.subject }} <br> Class : {{ teacher.teaching_class }}</p>
+                          <p>{{teacher.teacher.available_days}}</p>
+                         <p>{{teacher.time}}</p>
+                         <p></p>
                         </div>
                     </div>
                 </article>
                 <article class="accordion last-accordion">
                     <div class="accordion-head">
-                        <span>Contact Info</span>
+                        <span>Link And Demo Class</span>
                         <span class="icon">
                             <i class="icon fa fa-chevron-right"></i>
                         </span>
                     </div>
                     <div class="accordion-body">
                         <div class="content">
-                            <p>Phone : {{teacher.phone_number}} <br> Email : {{teacher.email}} <br> <a href="#"><i class="fa fa-whatsapp"></i></a> : {{teacher.whatsapp_number}} <br> <a href="{{teacher.facebook_link}}" target="_blank"><i class="fa fa-facebook"></i></a> :{{teacher.facebook_link}} </p>
-                            <p><a href="">Request Demo Class</a></p>
+                          <p><a rel="nofollow" href="{{ url_for('static', filename='uploads/' + teacher.demo_class_request.class_link) }}" target="_blank">View Class Link</a></p>
+                          <p><a rel="nofollow" href="{{ url_for('static', filename='uploads/' + teacher.demo_class_request.demo_class.video) }}" target="_blank">View Class Link</a></p>
+                          
+
                         </div>
                     </div>
                 </article>
@@ -344,14 +307,6 @@ https://templatemo.com/tm-569-edu-meeting
         </div>
       </div>
     </div>
-    <div class="footer">
-      <p>Copyright © 2022 Edu Meeting Co., Ltd. All Rights Reserved. 
-          <br>
-          Design: <a href="https://templatemo.com" target="_parent" title="free css templates">TemplateMo</a>
-          <br>
-          Distibuted By: <a href="https://themewagon.com" target="_blank" title="Build Better UI, Faster">ThemeWagon</a>
-        </p>
-    </div>
   </section>
 
   <section class="our-courses" id="courses">
@@ -359,272 +314,28 @@ https://templatemo.com/tm-569-edu-meeting
       <div class="row">
         <div class="col-lg-12">
           <div class="section-heading">
-            <h2>Our Popular Courses</h2>
+            <h2>Collected E-Books</h2>
           </div>
         </div>
         <div class="col-lg-12">
-          <div class="owl-courses-item owl-carousel">
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-01.jpg') }}" alt="Course One">
+          <div class="row">
+            {% for book in book_bookings %}
+            <div class="item col-lg-3">
+              <img src="{{ url_for('static' ,filename='uploads/'+book.book.image) }}" alt="Course One">
               <div class="down-content">
-                <h4>Morbi tincidunt elit vitae justo rhoncus</h4>
+                <h4>{{book.book.book_name}}</h4>
                 <div class="info">
                   <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
+                    <div class="col-12">
+                      {{book.book.subject}}
                     </div>
-                    <div class="col-4">
-                       <span>$160</span>
-                    </div>
+              
                   </div>
                 </div>
               </div>
             </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-02.jpg') }}" alt="Course Two">
-              <div class="down-content">
-                <h4>Curabitur molestie dignissim purus vel</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$180</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-03.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Nulla at ipsum a mauris egestas tempor</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$140</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-04.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Aenean molestie quis libero gravida</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$120</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-01.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Lorem ipsum dolor sit amet adipiscing elit</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$250</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-02.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>TemplateMo is the best website for Free CSS</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$270</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-03.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Web Design Templates at your finger tips</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$340</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-04.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Please visit our website again</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$360</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-01.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Responsive HTML Templates for you</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$400</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-02.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Download Free CSS Layouts for your business</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$430</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-03.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Morbi in libero blandit lectus cursus</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$480</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <img src="{{ url_for('static',filename='assets/images/course-04.jpg') }}" alt="">
-              <div class="down-content">
-                <h4>Curabitur molestie dignissim purus</h4>
-                <div class="info">
-                  <div class="row">
-                    <div class="col-8">
-                      <ul>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                        <li><i class="fa fa-star"></i></li>
-                      </ul>
-                    </div>
-                    <div class="col-4">
-                       <span>$560</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% endfor %}
+           
           </div>
         </div>
       </div>
