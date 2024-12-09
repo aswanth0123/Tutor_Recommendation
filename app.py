@@ -318,7 +318,9 @@ def parent_dashboard():
     teacher=Teacher.query.all()
     student=Student.query.filter_by(parent_id=session['user_id']).all()
     books=Book.query.all()
-    return render_template('parent_side/index.html',teachers=teacher,students=student,books=books)
+    accepted_books=BookBookings.query.filter_by(parent_id=session['user_id'],status='accepted').all()
+    print(accepted_books)
+    return render_template('parent_side/index.html',teachers=teacher,students=student,books=books,accepted_books=accepted_books)
 
 
 
