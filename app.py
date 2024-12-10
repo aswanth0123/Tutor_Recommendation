@@ -51,7 +51,12 @@ def admin_dashboard():
     if not isinstance(current_user, Admin):
         flash("Access denied.", "danger")
         return redirect(url_for('admin_login'))
-    return render_template('admin_side/index.html')
+    books=Book.query.count()
+    teacher=Teacher.query.count()
+    student=Student.query.count()
+    parent=User.query.count()
+    democlass=DemoClass.query.count()
+    return render_template('admin_side/index.html',books=books,teacher=teacher,student=student,parent=parent,democlass=democlass)
 
 @app.route('/logout')
 @login_required
@@ -275,6 +280,12 @@ def reject_book_request(request_id):
     flash('Book request rejected successfully!', 'success')
     return redirect(url_for('view_book_requests'))
 
+@app.route('/admin_view_review')
+def admin_view_review():
+    reviews = Review.query.all()
+    return render_template('admin_side/view_review.html', reviews=reviews)
+
+
 
 #------------------------------parent--------------------------------------
 
@@ -440,7 +451,11 @@ def mark_review():
         if comment and rateing1 and rateing2 and rateing3 and rateing4 and rateing5:
             print(comment,rateing1,rateing2,rateing3,rateing4,rateing5)
 
-        return redirect(url_for('_dashboard'))
+        return redirect(url_for('parent_dashboard'))
+@app.route('/parent_view_reviews')
+def parent_view_reviews():
+    review=Review.query.all()
+    return render_template('parent_side/view_review.html',reviews=review)
 
 
 #------------------------------teacher--------------------------------------
@@ -536,7 +551,11 @@ def reject_demo_class_request(req_id):
     db.session.commit()
     return redirect(url_for('view_demo_class_requests'))
 
-
+@app.route('/teacher_view_reviews')
+def teacher_view_reviews():
+    teacher=Teacher.query.get(session['teacher_id'])
+    reviews=Review.query.filter_by(teacher_id=teacher.id)
+    return render_template('teacher_side/view_reviews.html',reviews=reviews)
 
 # Run the app
 if __name__ == '__main__':

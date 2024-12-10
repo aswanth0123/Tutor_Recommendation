@@ -349,40 +349,47 @@
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th>Name</th>
-                          <th>Teacher / Parent</th>
-                          <th>Book Name </th>
-                          <th>Status</th>
-                          <th>More</th>
+                          <th>Parent</th>
+                          <th>Teacher </th>
+                          <th>Comment</th>
+                          <th>Rating</th>
                         </tr>
                       </thead>
                       <tbody class="table-border-bottom-0">
-                        {% for book in book_requests %}
+                        {% for rev in reviews %}
                         <tr>
-                          <td>{% if book.parent_id %}{{book.parent.name}}{% else %}{{book.teacher.name}}{% endif %}</td>
-                          <td>{% if book.parent_id %}Parent{% else %}Teacher{% endif %}</td>
-                          <td>{{book.book.book_name}}</td>
-                          <td>{{book.date}}</td>
-                          <td>{{book.status}}</td>
+                          <td>{{rev.user.name}}</td>
+                          <td>{{rev.teacher.name}}</td>
+                          <td>{{rev.comments}}</td>
                           <td>
-                            <div class="dropdown">
-                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                {% if book.status == 'pending'%}
-                                <a class="dropdown-item" href="accept_book_request/{{book.id}}"
-                                  ><i class="bx bx-edit-alt me-1"></i> Accept</a
-                                >
-                                <a class="dropdown-item" href="reject_book_request/{{book.id}}"
-                                ><i class="bx bx-edit-alt me-1"></i> Reject</a
-                              >
-                              {% endif %}
-                            
-                                
-                              </div>
-                            </div>
+                            {% if rev.rateing1 == 1 %}
+                        <i class="bx bx-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="bx bx-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing2 == 1 %}
+                        <i class="bx bx-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="bx bx-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing3 == 1 %}
+                        <i class="bx bx-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="bx bx-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing4 == 1 %}
+                        <i class="bx bx-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="bx bx-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing5 == 1 %}
+                        <i class="bx bx-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="bx bx-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+
                           </td>
+                    
                     
                         </tr>
                         {% endfor %}

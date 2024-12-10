@@ -21,29 +21,6 @@
     <link rel="stylesheet" href="{{ url_for('static' ,filename='assets/css/templatemo-edu-meeting.css') }}">
     <link rel="stylesheet" href="{{ url_for('static' ,filename='assets/css/owl.css') }}">
     <link rel="stylesheet" href="{{ url_for('static' ,filename='assets/css/lightbox.css') }}">
-
-
-    <style>
-                  .star-checkbox {
-      display: none;
-    }
-
-    /* Label styled as a star */
-    .star-checkbox + label {
-      font-size: 2rem;
-      color: gray;
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    /* When the checkbox is checked, change the star color */
-    .star-checkbox:checked + label {
-      color: gold;
-    }
-    </style>
-
-
-
 <!--
 
 TemplateMo 569 Edu Meeting
@@ -58,7 +35,7 @@ https://templatemo.com/tm-569-edu-meeting
    
 
   <!-- Sub Header -->
-  <div class="sub-header">
+  <!-- <div class="sub-header">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-sm-8">
@@ -78,7 +55,7 @@ https://templatemo.com/tm-569-edu-meeting
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky">
@@ -97,10 +74,11 @@ https://templatemo.com/tm-569-edu-meeting
                         <li><a href="demo_class_request">Demo Class</a></li>
                         <li><a href="parent_dashboard#books">E-books</a></li>
                         <li><a href="parent_dashboard#courses">Collected E-books</a></li>
-                        <li><a href="parent_view_teacher_bookings" class="active">Booking Details</a></li>
+                        <li><a href="parent_view_teacher_bookings">Booking Details</a></li>
                         <li><a href="parent_dashboard#contact">Add student</a></li> 
-                        <li><a href="parent_view_reviews" >Reviews</a></li>
-                        <li><a href="parent_teacher_logout">Logout</a></li> 
+                        <li><a href="parent_view_reviews" class="active">Reviews</a></li>
+
+                        <li><a href="parent_teacher_logout">Logout</a></li>  
                       </ul>        
                       <a class='menu-trigger'>
                           <span>Menu</span>
@@ -117,113 +95,70 @@ https://templatemo.com/tm-569-edu-meeting
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h6>Here are our upcoming meetings</h6>
-          <h2>Upcoming Meetings</h2>
+          <h6>You Can See Reviews</h6>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="meetings-page" id="meetings">
+  <section class="our-courses" id="courses">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
+          <div class="section-heading">
+            <h2>Reviews</h2>
+          </div>
+        </div>
+        <div class="col-lg-12">
           <div class="row">
-            <div class="col-lg-12">
-              <div class="filters">
-                <ul>
-                  <li data-filter="*"  class="active">All</li>
-                  <li data-filter="#pending">Pending</li>
-                  <li data-filter="#accepted">Accepted</li>
-                  <li data-filter="#rejected">Rejected</li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-lg-12">
-              <div class="row grid">
-                {% for bookings in teacher_bookings %}
-
-                <div class="col-lg-4 templatemo-item-col all" id="{{bookings.status}}">
-                  <div class="meeting-item">
-                    <div class="thumb">
-                      <div class="price">
-                        <span>{{bookings.status}}</span>
-                      </div>
-                      <a href="meeting-details.html"><img src="{{ url_for('static' ,filename='assets/images/meeting-01.jpg') }}" alt=""></a>
+            {% for rev in reviews %}
+            <div class="item col-lg-3">
+              <div class="down-content">
+                <p class="ms-3">
+                    <i class="fa fa-user"></i>
+                    {{rev.user.name}}</p>
+                        <p class="ms-3">Teacher Name : {{rev.teacher.name}}</p>
+                <h4>{{rev.comments}}</h4>
+                <div class="info">
+                  <div class="row">
+                    <div class="col-12">
+                        {% if rev.rateing1 == 1 %}
+                        <i class="fa fa-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="fa fa-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing2 == 1 %}
+                        <i class="fa fa-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="fa fa-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing3 == 1 %}
+                        <i class="fa fa-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="fa fa-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing4 == 1 %}
+                        <i class="fa fa-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="fa fa-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                        {% if rev.rateing5 == 1 %}
+                        <i class="fa fa-star" style="color: gold;"></i>
+                        {% else %}
+                        <i class="fa fa-star" style="color: rgb(0, 0, 0);"></i>
+                        {% endif %}
+                      
                     </div>
-                    <div class="down-content">
-                      <p>Teacher Name : {{bookings.teacher.name}}</p>
-                      <p>Date : {{bookings.date}}</p>
-                      <p>Student Name : {{bookings.demo_class_request.student.sname}}</p>
-                      {% if bookings.time %}
-                      <p>Time : {{bookings.time}} </p>
-                      <p><button type="button" data-bs-toggle="modal" data-bs-target="#{{bookings.id}}" class="btn btn-outline-primary">Mark Review</button>
-                      </p>
-                      {% endif %}
-
-                    </div>
+              
                   </div>
                 </div>
-                <div class="modal fade" id="{{bookings.id}}">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                
-                      <!-- Modal Header -->
-                      <div class="modal-header">
-                        <h4 class="modal-title">Modal Heading</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                      </div>
-                      <form action="mark_review" method="post">
-                
-                      <!-- Modal body -->
-                      <div class="modal-body">
-                        <input type="text" name="review" id="" class="form-control" placeholder="Type Your Review">
-                        <input type="text" name="teacher" value="{{bookings.teacher.id}}" id="" class="form-control" placeholder="Type Your Review" hidden>
-                        <input type="checkbox" id="star1{{bookings.id}}" name="star1" class="star-checkbox">
-                        <label for="star1{{bookings.id}}">&#9733;</label>
-                        <input type="checkbox" id="star2{{bookings.id}}" name="star2" class="star-checkbox">
-                        <label for="star2{{bookings.id}}">&#9733;</label>
-                        <input type="checkbox" id="star3{{bookings.id}}"  name="star3" class="star-checkbox">
-                        <label for="star3{{bookings.id}}">&#9733;</label>
-                        <input type="checkbox" id="star4{{bookings.id}}" name="star4" class="star-checkbox">
-                        <label for="star4{{bookings.id}}">&#9733;</label>
-                        <input type="checkbox" id="star5{{bookings.id}}"  name="star5" class="star-checkbox">
-                        <label for="star5{{bookings.id}}">&#9733;</label>
-
-
-                      </div>
-                 
-                      <!-- Modal footer -->
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger" >Send</button>
-                      </div>
-                    </form>
-                
-                    </div>
-                  </div>
-                </div> 
-                {% endfor %}
-
-              
-              
-             
-              
-           
-            
               </div>
             </div>
-
+            {% endfor %}
+           
           </div>
         </div>
       </div>
-    </div>
-    <div class="footer">
-      <p>Copyright © 2022 Edu Meeting Co., Ltd. All Rights Reserved. 
-          <br>
-          Design: <a href="https://templatemo.com" target="_parent" title="free css templates">TemplateMo</a>
-          <br>
-          Distibuted By: <a href="https://themewagon.com" target="_blank" title="Build Better UI, Faster">ThemeWagon</a>
-        </p>
     </div>
   </section>
 
