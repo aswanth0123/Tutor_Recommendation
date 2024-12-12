@@ -9,8 +9,8 @@ import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '43e77e90e26e1ddee83ea02b35065b805630944d4bd13d3abcbd120627d308a9' # Replace with a strong secret key
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://project:project123@localhost/project'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Aswanth74:project123@Aswanth74.mysql.pythonanywhere-services.com/Aswanth74$default'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://project:project123@localhost/project'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Aswanth74:project123@Aswanth74.mysql.pythonanywhere-services.com/Aswanth74$default'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 UPLOAD_FOLDER = 'static/uploads/'  # Directory to store uploaded files
@@ -183,6 +183,11 @@ def add_book():
         
         # Handle file upload
         image_file = request.files['file']
+        book_file = request.files['book']
+        book_file_name = None
+        if book_file and book_file.filename:
+            book_file_name = secure_filename(book_file.filename)
+            book_file.save(os.path.join(app.config['UPLOAD_FOLDER'], book_file_name))
         image_filename = None
         if image_file and image_file.filename:
             image_filename = secure_filename(image_file.filename)
@@ -344,7 +349,11 @@ def parent_dashboard():
     books=Book.query.all()
     accepted_books=BookBookings.query.filter_by(parent_id=session['user_id'],status='accepted').all()
     print(accepted_books)
-    return render_template('parent_side/index.html',teachers=teacher,students=student,books=books,accepted_books=accepted_books)
+    all_std=Student.query.count()
+    all_teacher=Teacher.query.count()   
+    all_demo=DemoClass.query.count()   
+    all_booking=TeacherBookings.query.count()
+    return render_template('parent_side/index.html',teachers=teacher,students=student,books=books,accepted_books=accepted_books,all_std=all_std,all_teacher=all_teacher,all_demo=all_demo,all_booking=all_booking)
 
 
 
