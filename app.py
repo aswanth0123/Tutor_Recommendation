@@ -9,7 +9,7 @@ import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '43e77e90e26e1ddee83ea02b35065b805630944d4bd13d3abcbd120627d308a9' # Replace with a strong secret key
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Project:Project123@localhost/project'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://project:project123@localhost/project'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 UPLOAD_FOLDER = 'static/uploads/'  # Directory to store uploaded files
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -72,14 +72,16 @@ def add_teacher():
         name = request.form['name']
         phone_number = request.form['phno']
         email = request.form['email']
-        subject = request.form['subject']
+        subject = request.form['course']
         whatsapp_number = request.form['whatsapp_number']
         address = request.form['address']
         place = request.form['place']
-        facebook_link = request.form['facebook_link']
         available_time = request.form['available_time']
         available_days = request.form['available_days']
         teaching_class = request.form['teaching_class']
+        description = request.form['description']
+        duration = request.form['class_duration']
+        rating = 0
 
         file = request.files['file']
 
@@ -96,14 +98,16 @@ def add_teacher():
                 name=name,
                 phone_number=phone_number,
                 email=email,
-                subject=subject,
+                course=subject,
                 whatsapp_number=whatsapp_number,
                 address=address,
                 place=place,
-                facebook_link=facebook_link,
                 available_time=available_time,
                 available_days=available_days,
                 teaching_class=teaching_class,
+                description=description,
+                duration=duration,
+                rating=rating,
                 file_name=filename  # Save the file name/path in the database
             )
 
@@ -131,14 +135,15 @@ def edit_teacher(teacher_id):
         teacher.name = request.form['name']
         teacher.phone_number = request.form['phno']
         teacher.email = request.form['email']
-        teacher.subject = request.form['subject']
+        teacher.course = request.form['course']
         teacher.whatsapp_number = request.form['whatsapp_number']
         teacher.address = request.form['address']
         teacher.place = request.form['place']
-        teacher.facebook_link = request.form['facebook_link']
         teacher.available_time = request.form['available_time']
         teacher.available_days = request.form['available_days']
         teacher.teaching_class = request.form['teaching_class']
+        teacher.description = request.form['description']
+        teacher.duration = request.form['class_duration']
         if 'file' in request.files:
             file = request.files['file']
             if file.filename:  # Check if a file was uploaded
@@ -285,6 +290,13 @@ def admin_view_review():
     reviews = Review.query.all()
     return render_template('admin_side/view_review.html', reviews=reviews)
 
+@app.route('/search', methods=['POST'])
+def search():
+    if request.method == 'POST':
+        query = request.form.get('search')
+        results = Teacher.query.filter(User.name.contains(query)).all()
+        print(results)
+        return redirect(url_for('parent_dashboard'))
 
 
 #------------------------------parent--------------------------------------
@@ -294,7 +306,6 @@ def parent_teacher_login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['pwd']
-        
         # Fetch the user from the database
         user = User.query.filter_by(email=email).first()   
         teacher=Teacher.query.filter_by(email=email).first()
@@ -448,8 +459,27 @@ def mark_review():
         review=Review(rateing1=rateing1,rateing2=rateing2,rateing3=rateing3,rateing4=rateing4,rateing5=rateing5,comments=comment,user_id=session['user_id'],teacher_id=teacher)
         db.session.add(review)
         db.session.commit()
-        if comment and rateing1 and rateing2 and rateing3 and rateing4 and rateing5:
-            print(comment,rateing1,rateing2,rateing3,rateing4,rateing5)
+        data=Review.query.filter_by(teacher_id=teacher).all()
+        d=0
+        for i in data:
+            r=0
+            if i.rateing1==True:
+                r+=1
+            if i.rateing2==True:    
+                r+=1
+            if i.rateing3==True:    
+                r+=1
+            if i.rateing4==True:    
+                r+=1
+            if i.rateing5==True:    
+                r+=1
+            print(r)
+            d+=r
+        d=d/len(data)
+        teacher=Teacher.query.get(teacher)
+        teacher.rating=d
+        db.session.commit() 
+        
 
         return redirect(url_for('parent_dashboard'))
 @app.route('/parent_view_reviews')
@@ -468,7 +498,11 @@ def teacher_dashboard():
     book=Book.query.all()
     book_bookings=BookBookings.query.filter_by(teacher_id=teacher.id).all()
     bookings=TeacherBookings.query.filter_by(teacher_id=teacher.id,status='accepted').all()
-    return render_template('teacher_side/index.html',teacher=teacher,books=book,book_bookings=book_bookings,bookings=bookings)
+    all_std=Student.query.count()
+    all_teacher=Teacher.query.count()   
+    all_demo=DemoClass.query.count()   
+    all_booking=TeacherBookings.query.count()
+    return render_template('teacher_side/index.html',teacher=teacher,books=book,book_bookings=book_bookings,bookings=bookings,all_std=all_std,all_teacher=all_teacher,all_demo=all_demo,all_booking=all_booking)  
 
 
 @app.route('/add_demo_video', methods=['GET', 'POST'])
@@ -557,6 +591,7 @@ def teacher_view_reviews():
     reviews=Review.query.filter_by(teacher_id=teacher.id)
     return render_template('teacher_side/view_reviews.html',reviews=reviews)
 
-# Run the app
+
+
 if __name__ == '__main__':
     app.run(debug=True)
