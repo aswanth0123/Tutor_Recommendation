@@ -10,8 +10,7 @@ import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '43e77e90e26e1ddee83ea02b35065b805630944d4bd13d3abcbd120627d308a9' # Replace with a strong secret key
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://project:project123@localhost/project'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Aswanth74:project123@Aswanth74.mysql.pythonanywhere-services.com'
-/Aswanth74$default
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://Aswanth74:project123@Aswanth74.mysql.pythonanywhere-services.com/Aswanth74$default'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 UPLOAD_FOLDER = 'static/uploads/'  # Directory to store uploaded files
