@@ -11,6 +11,8 @@ class User(db.Model):
     phone_number = db.Column(db.String(15), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    vector_data = db.Column(db.Text, nullable=True) 
+
 # Admin model
 class Admin(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +36,7 @@ class Teacher(db.Model):
     duration = db.Column(db.String(100))  
     description = db.Column(db.String(500))  
     rating = db.Column(db.Float)
+    vector_data = db.Column(db.Text, nullable=True) 
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -134,3 +137,12 @@ class Review(db.Model):
     # Relationships
     user = db.relationship('User', backref='reviews')
     teacher = db.relationship('Teacher', backref='reviews')
+
+
+class search_input(db.Model):
+    __tablename__ = 'search_input'
+    id = db.Column(db.Integer, primary_key=True)
+    search = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
+    # Relationships
+    user = db.relationship('User', backref='search_inputs')

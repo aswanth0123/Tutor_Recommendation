@@ -47,6 +47,8 @@ def combine_course_data_with_reviews(course_data):
         combined_vector = course_vector + review_vector  # Combine the course vector and review vector
     else:
         combined_vector = course_vector  # If no reviews, just use the course data
+
+    
     
     return combined_vector
 

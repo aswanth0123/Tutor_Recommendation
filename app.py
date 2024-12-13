@@ -5,8 +5,8 @@ from models import *  # Import models from models.py
 import os
 from werkzeug.utils import secure_filename
 import datetime
-
-
+from vectorize import vectorize_courses_with_reviews,pd,vectorize_student_with_search
+import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '43e77e90e26e1ddee83ea02b35065b805630944d4bd13d3abcbd120627d308a9' # Replace with a strong secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://project:project123@localhost/project'
@@ -114,7 +114,28 @@ def add_teacher():
             )
 
             db.session.add(new_teacher)
+            db.session.flush()
+            data = [{
+                "course_id": new_teacher.id,
+                "name": subject,
+                "rating": 0,
+                "class": teaching_class,
+                "duration": duration,
+                "description": description,
+                "reviews": ''
+            }]
+            df = pd.DataFrame(data)
+            course_vectors = vectorize_courses_with_reviews(df)
+            print("Course vectors:", course_vectors)
+            new_teacher.vector_data = json.dumps(course_vectors[0].tolist())
             db.session.commit()
+
+
+           
+
+
+
+
         except:
             return "<script>alert('Teacher details already exists!');window.location='/add_teacher';</script>"
 
@@ -377,7 +398,18 @@ def parent_register():
             )
             
             db.session.add(new_user)
+            db.session.flush()
+            data = [{
+                "student_id": new_user.id,
+                "class":'',
+                "search": ''
+            }]
+            df=pd.DataFrame(data)
+            student_vectors=vectorize_student_with_search(df)
+            print('student',student_vectors)
+            new_user.vector_data = json.dumps(student_vectors[0].tolist())
             db.session.commit()
+
             flash('Registration successful!', 'success')
         except:
             return "<script>alert('Email already exists');window.location='/';</script>"
@@ -396,6 +428,19 @@ def add_std():
             image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
         student=Student(sname=name,parent_id=parent_id,clad=class_name,img=image_filename)
         db.session.add(student)
+        db.session.flush()
+        existing_students = Student.query.filter_by(parent_id=parent_id).all()
+        existing_classes = [std.clad for std in existing_students]
+        print('student deatils',existing_classes)
+        data = [{
+            "student_id": parent.id,
+            "class":','.join(existing_classes),
+            "search": ''
+        }]
+        df=pd.DataFrame(data)
+        student_vectors=vectorize_student_with_search(df)
+        print('student',student_vectors)
+        parent.vector_data = json.dumps(student_vectors[0].tolist())
         db.session.commit() 
         flash('Registration successful!', 'success')
         return redirect(url_for('parent_dashboard'))
@@ -489,6 +534,25 @@ def mark_review():
         d=d/len(data)
         teacher=Teacher.query.get(teacher)
         teacher.rating=d
+        db.session.flush()
+        reviews=Review.query.filter_by(teacher_id=teacher.id).all()
+        review=[i.comments for i in reviews]
+        data = [{
+                "course_id": teacher.id,
+                "name": teacher.subject,
+                "rating": teacher.rating,
+                "class": teacher.teaching_class,
+                "duration": teacher.duration,
+                "description": teacher.description,
+                "reviews": ','.join(review)
+            }]
+        df = pd.DataFrame(data)
+        course_vectors = vectorize_courses_with_reviews(df)
+        print("Course vectors:", course_vectors)
+        teacher.vector_data = json.dumps(course_vectors[0].tolist())
+
+
+
         db.session.commit() 
         
 
