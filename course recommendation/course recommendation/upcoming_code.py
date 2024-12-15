@@ -22,6 +22,7 @@ def vectorize_user_input(user_input):
 def recommend_courses(user_input, course_vectors, course_ids, top_n=3):
     """Recommend courses based on user input."""
     user_vector = vectorize_user_input(user_input)
+    course_vectors = course_vectors.float()
     similarities = util.cos_sim(user_vector, course_vectors)
     
     # Ensure similarity scores are a NumPy array
@@ -33,7 +34,7 @@ def recommend_courses(user_input, course_vectors, course_ids, top_n=3):
     
     return recommended_courses
 
-# Load saved course vectors and convert to tensor
+# Load saved course vectors and convert to tensor    
 course_ids, course_vectors = load_course_vectors()
 
 # Fix: Convert list of NumPy arrays to one big NumPy array before converting to a PyTorch tensor

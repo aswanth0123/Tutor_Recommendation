@@ -139,7 +139,7 @@ class Review(db.Model):
     teacher = db.relationship('Teacher', backref='reviews')
 
 
-class search_input(db.Model):
+class Search_Input(db.Model):
     __tablename__ = 'search_input'
     id = db.Column(db.Integer, primary_key=True)
     search = db.Column(db.String(100), nullable=False)

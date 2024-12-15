@@ -69,9 +69,3 @@ def vectorize_student_with_search(df):
         student_vector = combine_student_with_search(student)
         student_vectors.append(student_vector)
     return student_vectors
-
-
-# Function to save course vectors
-# def save_course_vectors(course_vectors, course_ids, filename="course_vectors.pkl"):
-#     with open(filename, 'wb') as file:
-#         pickle.dump((course_ids, course_vectors), file)

@@ -194,47 +194,14 @@ https://templatemo.com/tm-569-edu-meeting
       <div class="row">
         <div class="col-lg-12">
           <div class="section-heading">
-            <h2>Recommented Teachers List</h2>
+            <h2>Recommented Teachers List  
+              <br> 
+              <a href="../all_teacher"> more teachers click here</a></h2>
           </div>
         </div>
-        <!-- <div class="col-lg-4">
-          <div class="categories">
-            <h4>Meeting Catgories</h4>
-            <ul>
-              <li><a href="#">Sed tempus enim leo</a></li>
-              <li><a href="#">Aenean molestie quis</a></li>
-              <li><a href="#">Cras et metus vestibulum</a></li>
-              <li><a href="#">Nam et condimentum</a></li>
-              <li><a href="#">Phasellus nec sapien</a></li>
-            </ul>
-            <div class="main-button-red">
-              <a href="meetings.html">All Upcoming Meetings</a>
-            </div>
-          </div>
-        </div> -->
         <div class="col-lg-12">
           <div class="row">
             {%  for teacher in teachers %}
-            <!-- <div class="col-lg-4">
-              <div class="meeting-item">
-                <div class="thumb">
-                  <div class="price">
-                    <span>{{ teacher.available_days }}</span>
-                  </div>
-                  <a href="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" target="_blank"><img src="{{ url_for('static', filename='uploads/' + teacher.file_name) }}" alt="New Lecturer Meeting" height="300px"></a>
-                </div>
-                <div class="down-content">
-                 
-                  <a href="meeting-details.html" style="display: block;"><h4 text-align="center">{{teacher.name}}</h4></a>
-                  <p>Subject : {{ teacher.subject }} </p>
-                  <p>Class : {{ teacher.teaching_class }} </p>
-                  <div class="date">
-                    <h6>{{ teacher.available_time }}</h6>
-                    <h6>{{ teacher.available_days }}</h6>
-                  </div>
-                </div>
-              </div>
-            </div>        -->
             <div class="col-lg-4">
               <div class="accordions is-first-expanded">
                 <article class="accordion">
@@ -277,7 +244,7 @@ https://templatemo.com/tm-569-edu-meeting
                     </div>
                     <div class="accordion-body">
                         <div class="content">
-                            <p>Subject : {{ teacher.subject }} <br> Class : {{ teacher.teaching_class }}</p>
+                          <p>Subject : {{ teacher.course }} <br> Class : {{ teacher.teaching_class }} <br> Course description : {{teacher.description}}</p> 
                         </div>
                     </div>
                 </article>
@@ -331,6 +298,7 @@ https://templatemo.com/tm-569-edu-meeting
             {% endfor %}
 
           </div>
+
         </div>
       </div>
     </div>
@@ -491,6 +459,7 @@ https://templatemo.com/tm-569-edu-meeting
                   <div class="row">
                     <div class="col-12">
                       {{book.book.subject}}
+                      <a href="{{ url_for('static' ,filename='uploads/'+book.book.file) }}">View book</a>
                     </div>
               
                   </div>

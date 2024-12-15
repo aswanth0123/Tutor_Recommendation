@@ -7,6 +7,13 @@ from werkzeug.utils import secure_filename
 import datetime
 from vectorize import vectorize_courses_with_reviews,pd,vectorize_student_with_search
 import json
+import numpy as np
+import torch
+from read_content import recommend_courses
+
+
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '43e77e90e26e1ddee83ea02b35065b805630944d4bd13d3abcbd120627d308a9' # Replace with a strong secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://project:project123@localhost/project'
@@ -222,7 +229,8 @@ def add_book():
             subject=subject,
             rack_no=int(rack_no),
             no_book=int(no_book),
-            image=image_filename
+            image=image_filename,
+            file=book_file_name
         )
         
         db.session.add(new_book)
@@ -318,13 +326,7 @@ def admin_view_review():
     reviews = Review.query.all()
     return render_template('admin_side/view_review.html', reviews=reviews)
 
-@app.route('/search', methods=['POST'])
-def search():
-    if request.method == 'POST':
-        query = request.form.get('search')
-        results = Teacher.query.filter(User.name.contains(query)).all()
-        print(results)
-        return redirect(url_for('parent_dashboard'))
+
 
 
 #------------------------------parent--------------------------------------
@@ -369,13 +371,30 @@ def parent_dashboard():
     student=Student.query.filter_by(parent_id=session['user_id']).all()
     books=Book.query.all()
     accepted_books=BookBookings.query.filter_by(parent_id=session['user_id'],status='accepted').all()
-    print(accepted_books)
     all_std=Student.query.count()
     all_teacher=Teacher.query.count()   
     all_demo=DemoClass.query.count()   
     all_booking=TeacherBookings.query.count()
-    return render_template('parent_side/index.html',teachers=teacher,students=student,books=books,accepted_books=accepted_books,all_std=all_std,all_teacher=all_teacher,all_demo=all_demo,all_booking=all_booking)
 
+    courses = Teacher.query.with_entities(Teacher.id, Teacher.vector_data).all()
+    course_ids = [course.id for course in courses]
+    course_vectors = [json.loads(course.vector_data) for course in courses]
+    course_vectors = np.array(course_vectors)  # Combine list of NumPy arrays to one array
+    course_vectors = torch.tensor(course_vectors)
+    parent=User.query.get(session['user_id'])   
+    parent_vectors=json.loads(parent.vector_data)
+    recommended_courses = recommend_courses(parent_vectors, course_vectors, course_ids, top_n=3)
+    data=[i[0] for i in recommended_courses]
+    recommended_teachers = Teacher.query.filter(Teacher.id.in_(data)).all()
+
+    print("Recommended Courses:", recommended_teachers)
+    return render_template('parent_side/index.html',teachers=recommended_teachers,students=student,books=books,accepted_books=accepted_books,all_std=all_std,all_teacher=all_teacher,all_demo=all_demo,all_booking=all_booking)
+
+
+@app.route('/all_teacher')
+def all_teacher():
+    teacher=Teacher.query.all()
+    return  render_template('parent_side/all.html',data=teacher)
 
 
 @app.route('/parent_register', methods=['GET', 'POST'])
@@ -561,6 +580,52 @@ def mark_review():
 def parent_view_reviews():
     review=Review.query.all()
     return render_template('parent_side/view_review.html',reviews=review)
+
+
+
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    if request.method == 'POST':
+        query = request.form.get('search')
+        user=User.query.get(session['user_id'])
+        search_input = Search_Input(search=query, user_id=user.id)
+        db.session.add(search_input)
+        db.session.flush()
+        user_search_inputs = Search_Input.query.filter_by(user_id=user.id).all()
+        user_searches = [s.search for s in user_search_inputs]
+        # print('user searches',user_searches)
+        existing_students = Student.query.filter_by(parent_id=user.id).all()
+        existing_classes = [std.clad for std in existing_students]
+        # print('student deatils',existing_classes)
+        data = [{
+            "student_id": user.id,
+            "class":','.join(existing_classes),
+            "search": ','.join(user_searches)
+        }]
+        df=pd.DataFrame(data)
+        student_vectors=vectorize_student_with_search(df)
+        # print('student',student_vectors)
+        user.vector_data = json.dumps(student_vectors[0].tolist())
+        db.session.commit()  
+
+        #-----------------search database------------------
+
+        teachers = Teacher.query.filter(
+            (Teacher.course.ilike(f'%{query}%')) |  # Case-insensitive search in name
+            (Teacher.teaching_class.ilike(f'%{query}%')) |  # Case-insensitive search in name
+            (Teacher.description.ilike(f'%{query}%'))  # Case-insensitive search in subject
+        ).all()       
+        print('result',teachers)
+
+        return render_template('parent_side/search_result.html',data=teachers)
+
+
+
+
+
+
 
 
 #------------------------------teacher--------------------------------------
