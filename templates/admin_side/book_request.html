@@ -223,6 +223,35 @@
                 </li>
 
               </ul>
+              </li>
+              <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-user"></i>
+                  <div data-i18n="Misc">Book Request Details</div>
+                </a>
+                <ul class="menu-sub">
+                  <li class="menu-item">
+                    <a href="view_book_requests" class="menu-link">
+                      <div data-i18n="Error">View All</div>
+                    </a>
+                  </li>
+  
+                </ul>
+              </li>
+              <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                  <i class="menu-icon tf-icons bx bx-user"></i>
+                  <div data-i18n="Misc">Reviews</div>
+                </a>
+                <ul class="menu-sub">
+                  <li class="menu-item">
+                    <a href="admin_view_review" class="menu-link">
+                      <div data-i18n="Error">View All</div>
+                    </a>
+                  </li>
+  
+                </ul>
+              </li>
         </aside>
         <!-- / Menu -->
 
@@ -342,26 +371,27 @@
                           <td>{{book.book.book_name}}</td>
                           <td>{{book.date}}</td>
                           <td>{{book.status}}</td>
+                          {% if book.status == 'pending'%}
+
                           <td>
                             <div class="dropdown">
                               <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                 <i class="bx bx-dots-vertical-rounded"></i>
                               </button>
                               <div class="dropdown-menu">
-                                {% if book.status == 'pending'%}
                                 <a class="dropdown-item" href="accept_book_request/{{book.id}}"
                                   ><i class="bx bx-edit-alt me-1"></i> Accept</a
                                 >
                                 <a class="dropdown-item" href="reject_book_request/{{book.id}}"
                                 ><i class="bx bx-edit-alt me-1"></i> Reject</a
                               >
-                              {% endif %}
                             
                                 
                               </div>
                             </div>
                           </td>
-                    
+                          {% endif %}
+
                         </tr>
                         {% endfor %}
                       </tbody>
