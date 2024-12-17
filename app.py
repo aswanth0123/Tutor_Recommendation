@@ -211,11 +211,6 @@ def add_book():
         
         # Handle file upload
         image_file = request.files['file']
-        book_file = request.files['book']
-        book_file_name = None
-        if book_file and book_file.filename:
-            book_file_name = secure_filename(book_file.filename)
-            book_file.save(os.path.join(app.config['UPLOAD_FOLDER'], book_file_name))
         image_filename = None
         if image_file and image_file.filename:
             image_filename = secure_filename(image_file.filename)
@@ -230,7 +225,6 @@ def add_book():
             rack_no=int(rack_no),
             no_book=int(no_book),
             image=image_filename,
-            file=book_file_name
         )
         
         db.session.add(new_book)
